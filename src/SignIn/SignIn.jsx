@@ -1,6 +1,9 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import auth from "../Firebase/Firebase.config";
+import { Link } from "react-router-dom";
+import {sendPasswordResetEmail } from "firebase/auth";
+
 
 const SignIn = () => {
   const [errorMessage, seterrorMessage] = useState("");
@@ -14,12 +17,35 @@ const SignIn = () => {
     setSuccessMessage("");
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
-        setSuccessMessage("Successfully Sign In");
+        if(result.user.emailVerified){
+          setSuccessMessage("Successfully Sign In");
+        }else{
+          alert("Pleace Verified Your Email")
+        }
       })
       .catch((error) => {
         seterrorMessage(error.message);
       });
   };
+
+  const emailRef = useRef(null) 
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    if(!email){
+      alert("Pleace provide an Email.");
+      return;
+    }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      alert("Pleace provide an valid Email.")
+      return;
+    }
+    sendPasswordResetEmail(auth, email)
+    .then((result)=>{
+      alert("Check Your Email We send a code");
+    })
+    .catch((error)=>{
+      alert(error.message);
+    })
+  }
 
   return (
     <div>
@@ -50,9 +76,9 @@ const SignIn = () => {
                 <input
                   type="email"
                   placeholder="email"
+                  ref={emailRef}
                   className="input input-bordered"
                   name="email"
-                  required
                 />
               </div>
               <div className="form-control">
@@ -67,7 +93,7 @@ const SignIn = () => {
                   required
                 />
                 <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
+                  <a onClick={handleForgetPassword} href="#" className="label-text-alt link link-hover">
                     Forgot password?
                   </a>
                 </label>
@@ -76,6 +102,7 @@ const SignIn = () => {
                 <button className="btn btn-primary">Sign In</button>
               </div>
             </form>
+            <p className="text-center pb-3">New to this website please <span className="text-green-600 font-bold"><Link to="/signUp">Sign Up</Link></span></p>
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../Firebase/Firebase.config";
 import { FaEyeSlash } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
     const [errorMessage, seterrorMessage] = useState('');
@@ -28,8 +29,15 @@ const SignUp = () => {
         }
         createUserWithEmailAndPassword(auth, email, password)
         .then((result)=>{
-            console.log(result)
-            setSuccessMessage("User Created Successfully");
+            console.log(result.user)
+            sendEmailVerification(result.user)
+            .then(()=>{
+              setSuccessMessage("User Created Successfully");
+            })
+            .catch((error)=>{
+              alert(error.message);
+            })
+            
         })
         .catch((error)=>{
             console.log(error)
@@ -82,11 +90,6 @@ const SignUp = () => {
                     }
                 </span>
                 </div>
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
               </div>
               <div className="flex gap-5">
                 <input type="checkbox" name="terms" id="terms" />
@@ -96,6 +99,7 @@ const SignUp = () => {
                 <button className="btn btn-primary">Sign Up</button>
               </div>
             </form>
+            <p className="text-center pb-3">Already have an account? please <span className="text-green-600 font-bold"><Link to="/signIn">Sign In</Link></span></p>
           </div>
         </div>
       </div>
