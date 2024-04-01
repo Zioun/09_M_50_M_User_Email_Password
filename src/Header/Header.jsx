@@ -5,7 +5,7 @@ const Header = () => {
   const links = (
     <>
       <li>
-        <NavLink>Home</NavLink>
+        <NavLink to="/">Home</NavLink>
       </li>
       <li>
         <a>About</a>
@@ -49,8 +49,12 @@ const Header = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end flex gap-5">
-          <a className="btn btn-success text-white"><NavLink to="/signIn">Sign In</NavLink></a>
-          <a className="btn btn-error text-white"><NavLink to="/signUp">Sign Up</NavLink></a>
+        <NavLink to="/signIn">
+          <p className="btn btn-success text-white">Sign In</p>
+          </NavLink>
+          <NavLink to="/signUp">
+          <p className="btn btn-error text-white">Sign Up</p>
+          </NavLink>
         </div>
       </div>
     </div>
