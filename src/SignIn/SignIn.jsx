@@ -17,10 +17,11 @@ const SignIn = () => {
     setSuccessMessage("");
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
+        console.log(result.user)
         if(result.user.emailVerified){
           setSuccessMessage("Successfully Sign In");
         }else{
-          alert("Pleace Verified Your Email")
+          alert("Please Verified Your Email")
         }
       })
       .catch((error) => {
@@ -32,10 +33,10 @@ const SignIn = () => {
   const handleForgetPassword = () => {
     const email = emailRef.current.value;
     if(!email){
-      alert("Pleace provide an Email.");
+      alert("Please provide an Email.");
       return;
     }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      alert("Pleace provide an valid Email.")
+      alert("Please provide an valid Email.")
       return;
     }
     sendPasswordResetEmail(auth, email)
